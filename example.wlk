@@ -56,9 +56,11 @@ class Nota {
   var property nota
   var property materia 
 
-  method validarNota() {
-    if(! nota.between(1,10) ){
+  method validarNota(_nota) {
+    if(! _nota.between(1,10) ){
       self.error("nota no valida")
+    }else{
+      nota = _nota
     }
   }
 
@@ -67,7 +69,7 @@ class Nota {
   }
 
   method notaDeEstudianteEnMAteria() {
-    return ([estudiante.nombreEstudiante(), nota, materia.nombre()])
+    return ([estudiante.nombreEstudiante(), materia.nombre(), nota])
   }
 
 
