@@ -19,6 +19,9 @@ class Estudiante{
 	
 	method materiaPerteneceACarrera(materia) = carrerasInscriptas.any({carrera => carrera.contieneMateria(materia)})
 
+  method notaEnMateria(materia) {
+    return 
+  }
 }
 
 class Carrera{
@@ -36,14 +39,36 @@ class Carrera{
 }
 
 class Materia{
-	var property nombre
+	var property nombreMateria
 }
 
 
 class HistoriaAcadémica {
   const property estudiantes = #{}
 
-  method registrarEstudiante(estudiante) {
-    
+  method registrarEstudiante(estudiante, materia) {
+  
   }
+}
+
+class Nota {
+  var property estudiante = Estudiante
+  var property nota
+  var property materia 
+
+  method validarNota() {
+    if(! nota.between(1,10) ){
+      self.error("nota no valida")
+    }
+  }
+
+  method notaAProbada() {
+    return nota.between(6, 10)
+  }
+
+  method notaDeEstudianteEnMAteria() {
+    return ([estudiante.nombreEstudiante(), nota, materia.nombre()])
+  }
+
+
 }
