@@ -17,7 +17,7 @@ class Estudiante{
 		carrerasInscriptas.add(carrera)
 	}
 	
-	method hayCarreraDeEStudianteQueTieneMateria(materia) = carrerasInscriptas.any({carrera => carrera.contieneMateria(materia)})
+	method materiaPerteneceACarrera(materia) = carrerasInscriptas.any({carrera => carrera.contieneMateria(materia)})
 
 }
 
@@ -37,7 +37,6 @@ class Carrera{
 
 class Materia{
 	var property nombre
-  const property curso  
 }
 
 
