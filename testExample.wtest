@@ -1,9 +1,43 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
+describe "Inscripción a carreras" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  const programacion = new Carrera(nombre = "Programación")
+  const tuess = new Carrera(nombre = "TUESS")
+  const to = new Carrera(nombre = "Terapia Ocupacional")
+
+  const objetos1 = new Materia(nombre = "Objetos 1")
+  const bd = new Materia(nombre = "Bases de Datos")
+  const mEyA = new Materia(nombre = "MEyA")
+  const psicologia = new Materia(nombre = "Psicología")
+
+  const alex = new Estudiante()
+
+  method initialize() {
+    programacion.agregarMateria(objetos1)
+    programacion.agregarMateria(bd)
+    tuess.agregarMateria(mEyA)
+    to.agregarMateria(psicologia)
+
+    alex.inscribirse(programacion)  
+    alex.inscribirse(tuess)
   }
 
+  test "Alex está inscripta en Programación y TUESS, y no en TO" {
+    assert.that(alex.estaInscripto(programacion))
+    assert.that(alex.estaInscripto(tuess))
+    assert.notThat(alex.estaInscripto(to))
+  }
+
+  test "Bases de Datos pertenece a una carrera de Alex" {
+    assert.that(alex.hayCarreraQueTieneMateria(bd))
+  }
+
+  test "Psicología no pertenece a ninguna carrera de Alex" {
+    assert.notThat(alex.hayCarreraQueTieneMateria(psicologia))
+  }
+
+  test "No se puede inscribir a Alex dos veces a Programación" {
+    assert.throwsException({ alex.inscribirse(programacion) }) 
+  }
 }
