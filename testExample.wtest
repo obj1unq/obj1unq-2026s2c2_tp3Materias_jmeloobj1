@@ -2,25 +2,25 @@ import example.*
 
 describe "Inscripción a carreras" {
 
-  const programacion = new Carrera(nombre = "Programación")
-  const tuess = new Carrera(nombre = "TUESS")
-  const to = new Carrera(nombre = "Terapia Ocupacional")
+  const programacion = new Carrera(nombreCarrera = "Programación")
+  const tuess = new Carrera(nombreCarrera = "TUESS")
+  const to = new Carrera(nombreCarrera = "Terapia Ocupacional")
 
-  const objetos1 = new Materia(nombre = "Objetos 1")
-  const bd = new Materia(nombre = "Bases de Datos")
-  const mEyA = new Materia(nombre = "MEyA")
-  const psicologia = new Materia(nombre = "Psicología")
+  const objetos1 = new Materia(nombreMateria = "Objetos 1")
+  const bd = new Materia(nombreMateria = "Bases de Datos")
+  const mEyA = new Materia(nombreMateria = "MEyA")
+  const psicologia = new Materia(nombreMateria = "Psicología")
 
-  const alex = new Estudiante()
+  const alex = new Estudiante(nombreEstudiante = "alex", carrerasInscripto = #{})
 
   method initialize() {
-    programacion.agregarMateria(objetos1)
-    programacion.agregarMateria(bd)
-    tuess.agregarMateria(mEyA)
-    to.agregarMateria(psicologia)
+    programacion.materias(objetos1)
+    programacion.materias(bd)
+    tuess.materias(mEyA)
+    to.materias(psicologia)
 
-    alex.inscribirse(programacion)  
-    alex.inscribirse(tuess)
+    alex.inscribirseACarrera(programacion)  
+    alex.inscribirseACarrera(tuess)
   }
 
   test "Alex está inscripta en Programación y TUESS, y no en TO" {
@@ -30,14 +30,14 @@ describe "Inscripción a carreras" {
   }
 
   test "Bases de Datos pertenece a una carrera de Alex" {
-    assert.that(alex.hayCarreraQueTieneMateria(bd))
+    assert.that(alex.carreraTieneAMateria(bd))
   }
 
   test "Psicología no pertenece a ninguna carrera de Alex" {
-    assert.notThat(alex.hayCarreraQueTieneMateria(psicologia))
+    assert.notThat(alex.carreraTieneAMateria(psicologia))
   }
 
   test "No se puede inscribir a Alex dos veces a Programación" {
-    assert.throwsException({ alex.inscribirse(programacion) }) 
+    assert.throwsException({ alex.inscribirseACarrera(programacion) }) 
   }
 }
