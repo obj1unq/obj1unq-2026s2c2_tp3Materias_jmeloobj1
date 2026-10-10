@@ -28,7 +28,44 @@ class Materia{
 	var property nombreMateria 
 }
 
+class HistoriaAcademica{
+  var property estudiante = Estudiante
+  var property materia = Materia
+  var property nota = 0
+  var property  materiasAprobadas = #{}
+  
+  method notaValida() {
+    return nota.between(1, 10)
+  }
 
+  method materiaSeAprobóPreviamente() {
+    return !estudiante.carrerasInscripto().contains(materia)
+  }
+
+  method materiaPerteneceACarreraDeEstudiante() {
+    return estudiante.carreraTieneAMateria(materia)
+  }
+
+  method aprobóLaMateria() {
+   return  self.notaValida() && nota <=6
+  }
+
+  method agregarMateriaAprobada() {
+    if(self.aprobóLaMateria()){
+      materiasAprobadas.add(materia)
+    }
+  }
+
+  method cantidadMateriasAprobadas() {
+    return materiasAprobadas.size()
+  }
+
+  method promedioDeMateriasAprobadasDeCarrera(carrera) {
+    
+  }
+
+
+}
 
 
 
