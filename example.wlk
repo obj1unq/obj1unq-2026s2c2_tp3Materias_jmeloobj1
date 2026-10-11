@@ -32,14 +32,14 @@ class HistoriaAcademica{
   var property estudiante = Estudiante
   var property materia = Materia
   var property nota = 0
-  var property  materiasAprobadas = #{}
+  var property materiasAprobadas = #{}
   
   method notaValida() {
     return nota.between(1, 10)
   }
 
   method materiaSeAprobóPreviamente() {
-    return !estudiante.carrerasInscripto().contains(materia)
+    return !(estudiante.carrerasInscripto().contains(materia))
   }
 
   method materiaPerteneceACarreraDeEstudiante() {
@@ -56,13 +56,29 @@ class HistoriaAcademica{
     }
   }
 
-  method cantidadMateriasAprobadas() {
-    return materiasAprobadas.size()
+  method promedioDeMateriasAprobadasDeCarrera(carrera) {
+    return carrera.materias() / self.cantidadDeMateriasAprobadasDeCarrera(carrera)
   }
 
-  method promedioDeMateriasAprobadasDeCarrera(carrera) {
-    
+  method materiasAprobadasDeCarrera(carrera) {
+    return materiasAprobadas.filter({materia => carrera.carreraTieneAMateria(materia)})
   }
+
+  method cantidadDeMateriasAprobadasDeCarrera(carrera) {
+    return self.materiasAprobadasDeCarrera(carrera).size()
+  }
+
+  method materiasAprobadasDeCarreras(carreras) {
+    return carreras.filter({carrera => self.cantidadDeMateriasAprobadasDeCarrera(carrera)})
+  }
+
+  method promedioDeMateriasAprobadasDeCarreras(carreras) {
+    return carreras.filter({carrera => self.promedioDeMateriasAprobadasDeCarrera(carrera)})
+  }
+
+
+
+
 
 
 }
