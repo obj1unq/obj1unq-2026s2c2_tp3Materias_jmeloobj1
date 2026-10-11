@@ -30,30 +30,33 @@ class Materia{
 
 class HistoriaAcademica{
   var property estudiante = Estudiante
-  var property materia = Materia
-  var property nota = 0
+  var property cursadas = []  
   var property materiasAprobadas = #{}
   
-  method notaValida() {
-    return nota.between(1, 10)
+method registrarCursada(materia, nota) {
+  if(!materiasAprobadas.contains(materia)){
+		cursadas.add(new Cursada(estudiante = estudiante ,materia = materia, nota = nota))
+	}else{
+    self.error("no se puede registrar cursada, esta materia ya está aprobada")
+  }
+} 
+
+  method materiaSeAprobóPreviamente(materia) {
+    return cursadas.any({cursada => cursada.contains(materia) && cursada.materia(materia).estaAprobada()})
   }
 
-  method materiaSeAprobóPreviamente() {
-    return !(estudiante.carrerasInscripto().contains(materia))
+  method materiaEstaAprobada(materia) {
+    return cursadas.any({cursada => cursada.materia(materia).estaAprobada()})
   }
 
-  method materiaPerteneceACarreraDeEstudiante() {
-    return estudiante.carreraTieneAMateria(materia)
-  }
-
-  method aprobóLaMateria() {
-   return  self.notaValida() && nota <=6
-  }
-
-  method agregarMateriaAprobada() {
-    if(self.aprobóLaMateria()){
-      materiasAprobadas.add(materia)
+  method agregarMateriaAprobada(materia) {
+    if (self.materiaEstaAprobada(materia)){
+        materiasAprobadas.add(materia)
     }
+  }
+
+  method materiaPerteneceACarreraDeEstudiante(materia) {
+    return estudiante.carreraTieneAMateria(materia)
   }
 
   method promedioDeMateriasAprobadasDeCarrera(carrera) {
@@ -76,11 +79,29 @@ class HistoriaAcademica{
     return carreras.filter({carrera => self.promedioDeMateriasAprobadasDeCarrera(carrera)})
   }
 
+ method ordenDeCursadaDeMateria(materia) {
+   return cursadas.filter({ cursada => cursada.materia() == materia })
+ }
 
 
+}
 
 
+class Cursada{
+  var property estudiante = Estudiante
+  var property materia = Materia
+  var property nota = 0 
+  
+  method notaValida() {
+    return nota.between(1, 10)
+  }
 
+
+  method estaAprobada(){
+    return nota >= 6 
+  } 
+
+ 
 }
 
 

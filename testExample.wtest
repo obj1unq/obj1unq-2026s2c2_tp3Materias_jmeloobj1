@@ -2,16 +2,37 @@ import example.*
 
 describe "Inscripción a carreras" {
 
+   // ---------- Carreras ----------
   const programacion = new Carrera(nombreCarrera = "Programación")
   const tuess = new Carrera(nombreCarrera = "TUESS")
   const to = new Carrera(nombreCarrera = "Terapia Ocupacional")
 
+  // ---------- Programación ----------
+  const epl = new Materia(nombreMateria = "Elementos de Programación y Lógica")
+  const mate1 = new Materia(nombreMateria = "Matemática 1")
   const objetos1 = new Materia(nombreMateria = "Objetos 1")
+  const objetos2 = new Materia(nombreMateria = "Objetos 2")
+  const objetos3 = new Materia(nombreMateria = "Objetos 3")
   const bd = new Materia(nombreMateria = "Bases de Datos")
-  const mEyA = new Materia(nombreMateria = "MEyA")
-  const psicologia = new Materia(nombreMateria = "Psicología")
+  const pconc = new Materia(nombreMateria = "Programación Concurrente")
 
-  const alex = new Estudiante(nombreEstudiante = "alex", carrerasInscripto = #{})
+  // ---------- TUESS ----------
+  const mEyA = new Materia(nombreMateria = "Matemáticas para Economía y Administración")
+  const tys = new Materia(nombreMateria = "Trabajo y Sociedad")
+  const economia = new Materia(nombreMateria = "Economía")
+  const desarrolloLocal = new Materia(nombreMateria = "Desarrollo Local")
+
+  // ---------- TO ----------
+  const lea = new Materia(nombreMateria = "Lectura y Escritura Académica")
+  const cienciasSalud = new Materia(nombreMateria = "Ciencias de la Salud")
+  const psicologia = new Materia(nombreMateria = "Psicología")
+  const antropologia = new Materia(nombreMateria = "Antropología")
+  const sociologia = new Materia(nombreMateria = "Sociología")
+
+  // ---------- Estudiantes ----------
+  const alex = new Estudiante(nombreEstudiante = "Alex")
+  const andy = new Estudiante(nombreEstudiante = "Andy")
+
 
   method initialize() {
     programacion.materias(objetos1)
@@ -39,5 +60,28 @@ describe "Inscripción a carreras" {
 
   test "No se puede inscribir a Alex dos veces a Programación" {
     assert.throwsException({ alex.inscribirseACarrera(programacion) }) 
+  }
+
+
+   test"HistoriaAcademica"{
+    const historiaAcademicaAlex = new HistoriaAcademica( estudiante = alex)
+
+    historiaAcademicaAlex.registrarCursada(mate1, 2)
+    historiaAcademicaAlex.registrarCursada(objetos1, 10)
+    historiaAcademicaAlex.registrarCursada(economia, 6)
+    historiaAcademicaAlex.registrarCursada(tys, 8)
+    historiaAcademicaAlex.registrarCursada(mate1, 8)
+    historiaAcademicaAlex.registrarCursada(bd, 2)
+    
+    assert.equals(2, historiaAcademicaAlex.ordenDeCursadaDeMateria(mate1).size())
+    assert.equals(1, historiaAcademicaAlex.ordenDeCursadaDeMateria(objetos1).size())
+    assert.equals(1, historiaAcademicaAlex.ordenDeCursadaDeMateria(economia).size())
+    assert.equals(1, historiaAcademicaAlex.ordenDeCursadaDeMateria(tys).size())
+    assert.equals(1, historiaAcademicaAlex.ordenDeCursadaDeMateria(bd).size())
+
+    
+    historiaAcademicaAlex.registrarCursada(mate1, 7)
+    assert.equals(2, historiaAcademicaAlex.cursadasDeMateria(mate1).size())
+
   }
 }
