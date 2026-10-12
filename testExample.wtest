@@ -2,66 +2,32 @@ import example.*
 
 describe "Inscripción a carreras" {
 
-   // ---------- Carreras ----------
-  const programacion = new Carrera(nombreCarrera = "Programación")
-  const tuess = new Carrera(nombreCarrera = "TUESS")
-  const to = new Carrera(nombreCarrera = "Terapia Ocupacional")
-
-  // ---------- Programación ----------
-  const epl = new Materia(nombreMateria = "Elementos de Programación y Lógica")
-  const mate1 = new Materia(nombreMateria = "Matemática 1")
-  const objetos1 = new Materia(nombreMateria = "Objetos 1")
-  const objetos2 = new Materia(nombreMateria = "Objetos 2")
-  const objetos3 = new Materia(nombreMateria = "Objetos 3")
-  const bd = new Materia(nombreMateria = "Bases de Datos")
-  const pconc = new Materia(nombreMateria = "Programación Concurrente")
-
-  // ---------- TUESS ----------
-  const mEyA = new Materia(nombreMateria = "Matemáticas para Economía y Administración")
-  const tys = new Materia(nombreMateria = "Trabajo y Sociedad")
-  const economia = new Materia(nombreMateria = "Economía")
-  const desarrolloLocal = new Materia(nombreMateria = "Desarrollo Local")
-
-  // ---------- TO ----------
-  const lea = new Materia(nombreMateria = "Lectura y Escritura Académica")
-  const cienciasSalud = new Materia(nombreMateria = "Ciencias de la Salud")
+ const bd = new Materia(nombreMateria = "Bases de Datos")
   const psicologia = new Materia(nombreMateria = "Psicología")
-  const antropologia = new Materia(nombreMateria = "Antropología")
-  const sociologia = new Materia(nombreMateria = "Sociología")
-
-  // ---------- Estudiantes ----------
+  const programacion = new Carrera(nombreCarrera = "Programación", materias = #{bd})
+  const tuess = new Carrera(nombreCarrera = "TUESS")
+  const to = new Carrera(nombreCarrera = "TO", materias = #{psicologia})
   const alex = new Estudiante(nombreEstudiante = "Alex")
-  const andy = new Estudiante(nombreEstudiante = "Andy")
-
 
   method initialize() {
-    programacion.materias(objetos1)
-    programacion.materias(bd)
-    tuess.materias(mEyA)
-    to.materias(psicologia)
-
-    alex.inscribirseACarrera(programacion)  
+    alex.inscribirseACarrera(programacion)
     alex.inscribirseACarrera(tuess)
   }
 
-  test "Alex está inscripta en Programación y TUESS, y no en TO" {
-    assert.that(alex.estaInscripto(programacion))
-    assert.that(alex.estaInscripto(tuess))
-    assert.notThat(alex.estaInscripto(to))
+  test "Alex está en Programación y TUESS, no en TO" {
+    assert.that(alex.estaInscriptoEn(programacion))
+    assert.that(alex.estaInscriptoEn(tuess))
+    assert.notThat(alex.estaInscriptoEn(to))
   }
 
-  test "Bases de Datos pertenece a una carrera de Alex" {
+  test "BD pertenece a sus carreras, Psicología no" {
     assert.that(alex.carreraTieneAMateria(bd))
-  }
-
-  test "Psicología no pertenece a ninguna carrera de Alex" {
     assert.notThat(alex.carreraTieneAMateria(psicologia))
   }
 
-  test "No se puede inscribir a Alex dos veces a Programación" {
-    assert.throwsException({ alex.inscribirseACarrera(programacion) }) 
+  test "no puede inscribirse dos veces a Programación" {
+    assert.throwsException({ alex.inscribirseACarrera(programacion) })
   }
-
 
    test"HistoriaAcademica"{
     const historiaAcademicaAlex = new HistoriaAcademica( estudiante = alex)
