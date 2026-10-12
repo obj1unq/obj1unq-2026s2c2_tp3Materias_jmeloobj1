@@ -7,6 +7,22 @@ class Estudiante {
   }
   
   method carreraTieneAMateria(materia) = carrerasInscripto.any({ carrera => carrera.carreraTieneAMateria(materia) })
+
+  method puedeInscribirseAMateria(materia) {
+      return(self.carreraTieneAMateria(materia) &&
+		        !self.tieneAprobadaMateria(materia) &&
+		        !self.estaInscriptoEnMateria(materia) &&
+		        materia.estudianteCumpleLosRequisitos(self))
+  }
+
+  method tieneAprobadaMateria(materia) {
+       HistoriaAcademica.estudiante(self)
+       return HistoriaAcademica.tieneAprobadaMateria(materia)
+    }
+
+  method estaInscriptoEnMateria(materia){
+    return materia.estudiantesInscriptos().contains(self)
+  }
 }
 
 class Carrera {
@@ -18,23 +34,34 @@ class Carrera {
 
 class Materia {
   var property nombreMateria
+  const property requisitos = #{}
+  var property estudiantesInscriptos = #{}
+
+  method estudianteCumpleLosRequisitos(estudiante) {
+    HistoriaAcademica.estudiante(estudiante)
+    return requisitos.all({materia => materia.any(HistoriaAcademica.materiasAprobadas())})
+  }
+
+ 
 }
 
 class HistoriaAcademica {
   var property estudiante = Estudiante
   var property cursadas = []
   
-  method registrarCursada(materia, nota) {
-    const cursada = new Cursada(materia = materia, nota = nota)
-    if (!cursada.notaValida()) 
+ method registrarCursada(materia, nota) {
+  const cursada = new Cursada(materia = materia, nota = nota)
+  if (!cursada.notaValida()) {
     self.error("la nota debe estar entre 1 y 10")
-    if (!estudiante.carreraTieneAMateria(materia))
-     self.error( "la materia no pertenece a ninguna de sus carreras")
-    if (self.tieneAprobadaMateria(materia)) self.error(
-        "la materia ya está aprobada"
-      )
-    cursadas.add(cursada)
   }
+  if (!estudiante.carreraTieneAMateria(materia)) {
+    self.error("la materia no pertenece a ninguna de sus carreras")
+  }
+  if (self.tieneAprobadaMateria(materia)) {
+    self.error("la materia ya está aprobada")
+  }
+  cursadas.add(cursada)
+}
   
    method tieneAprobadaMateria(materia) =
     cursadas.any({ cursada => cursada.materia() == materia && cursada.estaAprobada() })
@@ -61,7 +88,6 @@ class HistoriaAcademica {
     return  carrera.materias().size() / carrera.sum({ carrera => self.cantidadAprobadasDeCarrera(carrera) }) 
   }
 
-  // Req 4
   method materiasAprobadasDeTodasLasCarreras() =
     self.materiasAprobadas().filter({ materia => estudiante.carreraTieneAMateria(materia) })
 

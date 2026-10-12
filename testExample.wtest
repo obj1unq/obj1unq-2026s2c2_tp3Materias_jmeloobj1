@@ -2,12 +2,17 @@ import example.*
 
 describe "Inscripción a carreras" {
 
- const bd = new Materia(nombreMateria = "Bases de Datos")
+   const epl = new Materia(nombreMateria = "Elementos de Programación y Lógica")
+  const mate1 = new Materia(nombreMateria = "Matemática 1")
+  const objetos1 = new Materia(nombreMateria = "Objetos 1")
+  const economia = new Materia(nombreMateria = "Economía")
   const psicologia = new Materia(nombreMateria = "Psicología")
-  const programacion = new Carrera(nombreCarrera = "Programación", materias = #{bd})
-  const tuess = new Carrera(nombreCarrera = "TUESS")
-  const to = new Carrera(nombreCarrera = "TO", materias = #{psicologia})
   const alex = new Estudiante(nombreEstudiante = "Alex")
+  const programacion = new Carrera( nombreCarrera = "Programación",materias = #{epl, mate1, objetos1})
+  const tuess = new Carrera(nombreCarrera = "TUESS", materias = #{economia})
+  const to = new Carrera(nombreCarrera = "TO", materias = #{psicologia})
+  const bd = new Materia(nombreMateria = "Bases de Datos")
+  const tys = new Materia(nombreMateria = "Trabajo y Sociedad")
 
   method initialize() {
     alex.inscribirseACarrera(programacion)
@@ -50,4 +55,6 @@ describe "Inscripción a carreras" {
     assert.equals(2, historiaAcademicaAlex.cursadasDeMateria(mate1).size())
 
   }
+
+  
 }
