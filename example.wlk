@@ -1,7 +1,8 @@
 class Estudiante {
   var property nombreEstudiante
   var property carrerasInscripto = #{}
-  
+  const property historiaAcademica = new HistoriaAcademica() 
+
   method inscribirseACarrera(carrera) {
     if (!carrerasInscripto.contains(carrera)) carrerasInscripto.add(carrera)
   }
@@ -22,8 +23,7 @@ class Estudiante {
   }
 
   method tieneAprobadaMateria(materia) {
-       HistoriaAcademica.estudiante(self)
-       return HistoriaAcademica.tieneAprobadaMateria(materia)
+       return self.historiaAcademica().tieneAprobadaMateria(materia)
     }
 
   method estaInscriptoEnMateria(materia){
@@ -31,8 +31,8 @@ class Estudiante {
   }
 
   method creditosObtenidos(){
-    HistoriaAcademica.estudiante(self)
-    return HistoriaAcademica.materiasAprobadas().sum({materia => materia.creditos()})
+    
+    return self.historiaAcademica().materiasAprobadas().sum({materia => materia.creditos()})
   }
 
 }
@@ -63,8 +63,7 @@ class Materia {
   var property creditosQueNecesita = 0 
 
   method estudianteCumpleLosRequisitos(estudiante) {
-    HistoriaAcademica.estudiante(estudiante)
-    return requisitos.all({materia => materia.any(HistoriaAcademica.materiasAprobadas())}) && 
+    return requisitos.all({materia => materia.any(estudiante.historiaAcademica().materiasAprobadas())}) && 
     (estudiante.creditosObtenidos() >= creditosQueNecesita) &&
     self.materiasNecesariasDeAñoAnterior().all({materia => materia.any(HistoriaAcademica.materiasAprobadas())})
   }
