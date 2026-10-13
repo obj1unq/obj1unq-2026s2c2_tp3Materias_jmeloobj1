@@ -15,6 +15,12 @@ class Estudiante {
 		        materia.estudianteCumpleLosRequisitos(self))
   }
 
+  method inscribirseAMateria(materia) {
+    if(self.puedeInscribirseAMateria(materia)){
+        materia.estudiantesInscriptos(self)
+    }
+  }
+
   method tieneAprobadaMateria(materia) {
        HistoriaAcademica.estudiante(self)
        return HistoriaAcademica.tieneAprobadaMateria(materia)
@@ -23,6 +29,12 @@ class Estudiante {
   method estaInscriptoEnMateria(materia){
     return materia.estudiantesInscriptos().contains(self)
   }
+
+  method creditosObtenidos(){
+    HistoriaAcademica.estudiante(self)
+    return HistoriaAcademica.materiasAprobadas().sum({materia => materia.creditos()})
+  }
+
 }
 
 class Carrera {
@@ -30,12 +42,18 @@ class Carrera {
   var property materias = #{}
   
   method carreraTieneAMateria(materia) = materias.contains(materia)
+
+  method materiasHabilitadaDeEstudiante(estudiante) {
+    materias.filter({materia => estudiante.puedeInscribirseAMateria(materia)})
+  }
+
 }
 
 class Materia {
   var property nombreMateria
   const property requisitos = #{}
   var property estudiantesInscriptos = #{}
+  const property creditos = 0
 
   method estudianteCumpleLosRequisitos(estudiante) {
     HistoriaAcademica.estudiante(estudiante)
