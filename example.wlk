@@ -18,7 +18,7 @@ class Estudiante {
 
   method inscribirseAMateria(materia) {
     if(self.puedeInscribirseAMateria(materia)){
-        materia.estudiantesInscriptos(self)
+        materia.estudiantesInscriptos().add(self)
     }
   }
 
@@ -44,7 +44,7 @@ class Carrera {
   method carreraTieneAMateria(materia) = materias.contains(materia)
 
   method materiasHabilitadaDeEstudiante(estudiante) {
-    materias.filter({materia => estudiante.puedeInscribirseAMateria(materia)})
+   return materias.filter({materia => estudiante.tieneMateriaAprobada(materia)})
   }
 
   method materiasDeAño(año) {
@@ -63,9 +63,9 @@ class Materia {
   var property creditosQueNecesita = 0 
 
   method estudianteCumpleLosRequisitos(estudiante) {
-    return requisitos.all({materia => materia.any(estudiante.historiaAcademica().materiasAprobadas())}) && 
+    return requisitos.all({materia => materia.any({estudiante.tieneAprobadaMateria(materia)}) }) && 
     (estudiante.creditosObtenidos() >= creditosQueNecesita) &&
-    self.materiasNecesariasDeAñoAnterior().all({materia => materia.any(HistoriaAcademica.materiasAprobadas())})
+    self.materiasNecesariasDeAñoAnterior().all({materia => materia.any(estudiante.tieneAprobadaMateria(materia))})
   }
 
   method materiasNecesariasDeAñoAnterior() {
