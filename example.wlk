@@ -47,21 +47,35 @@ class Carrera {
     materias.filter({materia => estudiante.puedeInscribirseAMateria(materia)})
   }
 
+  method materiasDeAño(año) {
+    return materias.filter({materia => materia.añoMateria() == año})
+  }
+
 }
 
 class Materia {
   var property nombreMateria
+  const property carreraQuePertenece = Carrera
   const property requisitos = #{}
-  var property estudiantesInscriptos = #{}
-  const property creditos = 0
+  const property estudiantesInscriptos = #{}
+  var property añoMateria = 1
+  var property creditosQueOtorga = 0
+  var property creditosQueNecesita = 0 
 
   method estudianteCumpleLosRequisitos(estudiante) {
     HistoriaAcademica.estudiante(estudiante)
-    return requisitos.all({materia => materia.any(HistoriaAcademica.materiasAprobadas())})
+    return requisitos.all({materia => materia.any(HistoriaAcademica.materiasAprobadas())}) && 
+    (estudiante.creditosObtenidos() >= creditosQueNecesita) &&
+    self.materiasNecesariasDeAñoAnterior().all({materia => materia.any(HistoriaAcademica.materiasAprobadas())})
   }
 
+  method materiasNecesariasDeAñoAnterior() {
+    return carreraQuePertenece.materiasDeAño(añoMateria - 1)
+  }
  
 }
+
+
 
 class HistoriaAcademica {
   var property estudiante = Estudiante
