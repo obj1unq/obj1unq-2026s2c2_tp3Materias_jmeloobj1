@@ -1,3 +1,49 @@
+
+object parte5 {
+const alex = new Estudiante(nombre = "Alex")
+const andy = new Estudiante(nombre = "Andy")
+
+
+const programacion = new Carrera(nombre = "Programación")
+  const epl = new Materia(nombre = "Elementos de Programación y Lógica", carrera = programacion, anio = 1, creditos = 8)
+  const mate1 = new Materia(nombre = "Matemática 1", carrera = programacion, anio = 1, creditos = 8)
+  const objetos1 = new Materia(nombre = "Objetos 1", carrera = programacion, anio = 1, creditos = 8)
+  const objetos2 = new Materia(nombre = "Objetos 2", carrera = programacion, anio = 2, creditos = 8)
+
+  const tuess = new Carrera(nombre = "TUESS")
+  const mEyA = new Materia(nombre = "Matemáticas para Economía y Administración", carrera = tuess, anio = 1, creditos = 8)
+  const tys = new Materia(nombre = "Trabajo y Sociedad", carrera = tuess, anio = 1, creditos = 8)
+  const economia = new Materia(nombre = "Economía", carrera = tuess, anio = 1, creditos = 8)
+  const desarrolloLocal = new Materia(nombre = "Desarrollo Local", carrera = tuess, anio = 2, creditos = 8)
+
+  const to = new Carrera(nombre = "Terapia Ocupacional")
+  const lea = new Materia(nombre = "Lectura y Escritura Académica", carrera = to, anio = 1, creditos = 8)
+  const cienciasSalud = new Materia(nombre = "Ciencias de la Salud", carrera = to, anio = 1, creditos = 8)
+  const psicologia = new Materia(nombre = "Psicología", carrera = to, anio = 2, creditos = 4)
+  const antropologia = new Materia(nombre = "Antropología", carrera = to, anio = 2, creditos = 4)
+  const sociologia = new Materia(nombre = "Sociología", carrera = to, anio = 3, creditos = 8)
+
+  method requisitos() {
+    objetos2.requisito(new Correlativas(materiasRequeridas = #{objetos1, mate1}))
+    desarrolloLocal.requisito(new Correlativas(materiasRequeridas = #{mEyA}))
+    psicologia.requisito(anioAnterior)
+    antropologia.requisito(new Creditos(creditosMinimos = 8))
+    sociologia.requisito(new Creditos(creditosMinimos = 10))
+  }
+  method registraCursada(){
+    alex.inscribirseACarrera(programacion)
+    alex.inscribirseACarrera(tuess)
+    alex.registrarCursada(mate1, 2)
+    alex.registrarCursada(objetos1, 10)
+    alex.registrarCursada(economia, 6)
+    alex.registrarCursada(tys, 8)
+    alex.registrarCursada(mate1, 8)
+    alex.registrarCursada(bd, 2)
+    andy.registrarCursada(objetos1, 10)
+    andy.registrarCursada(mate1, 10)
+  }
+}
+
 class Estudiante {
   var property nombre
   const property carreras = #{}
@@ -42,6 +88,21 @@ class Estudiante {
   ) = historiaAcademica.materiasAprobadasDeCarrera(carrera).sum(
     { materia => materia.creditos() }
   )
+
+  	method registrarCursada(materia, nota) {
+		self.validarRegistroDeCursada(materia)
+		historiaAcademica.registrarCursada(materia, nota)
+	}
+
+  method validarRegistroDeCursada(materia) {
+		if (!self.carreraTieneAMateria(materia)) {
+			self.error(nombre + " no puede registrar la materia " + materia.nombre() + ": no pertenece a ninguna de sus carreras")
+		}
+		if (self.carreraTieneAMateria(materia)) {
+			self.error(nombre + " no puede registrar la materia " + materia.nombre() + ": ya la tiene aprobada")
+		}
+	}
+
 }
 
 class Carrera {
@@ -83,7 +144,6 @@ object sinRequisitos {
 
 class Creditos {
   const property creditosMinimos
-  
    method cumple(estudiante, materia) =
     estudiante.creditosEnCarrera(materia.carrera()) >= creditosMinimos
 }
