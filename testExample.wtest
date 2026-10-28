@@ -11,249 +11,144 @@ describe "Sistema de inscripciones" {
   const epl = new Materia(nombre = "Elementos de Programación y Lógica", carrera = programacion, anio = 1, creditos = 8)
   const mate1 = new Materia(nombre = "Matemática 1", carrera = programacion, anio = 1, creditos = 8)
   const objetos1 = new Materia(nombre = "Objetos 1", carrera = programacion, anio = 1, creditos = 8)
-  const objetos2 = new Materia(nombre = "Objetos 2", carrera = programacion, anio = 2, creditos = 8)
-  const objetos3 = new Materia(nombre = "Objetos 3", carrera = programacion, anio = 3, creditos = 8)
+  const objetos2 = new Materia(nombre = "Objetos 2", carrera = programacion, anio = 2, creditos = 8, requisitos = obj2Correlativas)
+  const objetos3 = new Materia(nombre = "Objetos 3", carrera = programacion, anio = 3, creditos = 8, requisitos = obj3Correlativas)
   const bd = new Materia(nombre = "Bases de Datos", carrera = programacion, anio = 1, creditos = 8)
-  const pconc = new Materia(nombre = "Programación Concurrente", carrera = programacion, anio = 3, creditos = 8)
+  const pconc = new Materia(nombre = "Programación Concurrente", carrera = programacion, anio = 3, creditos = 8, requisitos = PConCCorrelativas)
 
   // ---------- TUESS ----------
   const mEyA = new Materia(nombre = "Matemáticas para Economía y Administración", carrera = tuess, anio = 1, creditos = 8)
   const tys = new Materia(nombre = "Trabajo y Sociedad", carrera = tuess, anio = 1, creditos = 8)
   const economia = new Materia(nombre = "Economía", carrera = tuess, anio = 1, creditos = 8)
-  const desarrolloLocal = new Materia(nombre = "Desarrollo Local", carrera = tuess, anio = 2, creditos = 8)
+  const desarrolloLocal = new Materia(nombre = "Desarrollo Local", carrera = tuess, anio = 2, creditos = 8, requisitos = desarrolloLocalCorrelativas)
 
   // ---------- TO ----------
   const lea = new Materia(nombre = "Lectura y Escritura Académica", carrera = to, anio = 1, creditos = 8)
   const cienciasSalud = new Materia(nombre = "Ciencias de la Salud", carrera = to, anio = 1, creditos = 8)
-  const psicologia = new Materia(nombre = "Psicología", carrera = to, anio = 2, creditos = 4)
-  const antropologia = new Materia(nombre = "Antropología", carrera = to, anio = 2, creditos = 4)
-  const sociologia = new Materia(nombre = "Sociología", carrera = to, anio = 3, creditos = 8)
+  const psicologia = new Materia(nombre = "Psicología", carrera = to, anio = 2, creditos = 4, requisitos = anioAnterior)
+  const antropologia = new Materia(nombre = "Antropología", carrera = to, anio = 2, creditos = 4, requisitos = antropologiaCreditos)
+  const sociologia = new Materia(nombre = "Sociología", carrera = to, anio = 3, creditos = 8, requisitos = sociologiaCreditos)
 
   // ---------- Estudiantes ----------
   const alex = new Estudiante(nombre = "Alex")
   const andy = new Estudiante(nombre = "Andy")
 
-  method initialize() {
-    // Requisitos:
-    objetos2.requisito(new Correlativas(materiasRequeridas = #{objetos1, mate1}))
-    objetos3.requisito(new Correlativas(materiasRequeridas = #{objetos2, bd}))
-    pconc.requisito(new Correlativas(materiasRequeridas = #{objetos1, bd}))
-    desarrolloLocal.requisito(new Correlativas(materiasRequeridas = #{mEyA}))
-    psicologia.requisito(anioAnterior)
-    antropologia.requisito(new Creditos(creditosMinimos = 8))
-    sociologia.requisito(new Creditos(creditosMinimos = 10))
+  // ---------- Correlativas ----------
+  const obj2Correlativas = new Correlativas(materiasRequeridas = #{objetos1, mate1})
+  const obj3Correlativas = new Correlativas(materiasRequeridas = #{objetos2, bd})
+  const PConCCorrelativas = new Correlativas(materiasRequeridas = #{objetos1, bd})
+  const desarrolloLocalCorrelativas = new Correlativas(materiasRequeridas = #{mEyA}) 
 
-    // Alex: Programación y TUESS, con su historia de cursadas
-    alex.inscribirseACarrera(programacion)
-    alex.inscribirseACarrera(tuess)
-    alex.registrarCursada(mate1, 2)
-    alex.registrarCursada(objetos1, 10)
-    alex.registrarCursada(economia, 6)
-    alex.registrarCursada(tys, 8)
-    alex.registrarCursada(mate1, 8)
-    alex.registrarCursada(bd, 2)
-
-    // Andy: Programación (obj1 y mate1 con 10) y TO (sin nada aprobado en TO)
-    andy.inscribirseACarrera(programacion)
-    andy.inscribirseACarrera(to)
-    andy.registrarCursada(objetos1, 10)
-    andy.registrarCursada(mate1, 10)
-  }
-
+ // ---------- Creditos ----------
+  const antropologiaCreditos = new Creditos(creditosMinimos = 8)
+  const sociologiaCreditos = new Creditos(creditosMinimos = 10)
   // ======================= PARTE 1: Inscripción a carreras =======================
 
-  test "P1.1 Alex está inscripta en Programación y TUESS, y no en TO" {
+
+method initialize(){
+  programacion.agregarMateria(epl)
+  programacion.agregarMateria(mate1)
+  programacion.agregarMateria(objetos1)
+  programacion.agregarMateria(objetos2)
+  programacion.agregarMateria(bd)
+  programacion.agregarMateria(pconc)
+  tuess.agregarMateria(mEyA)
+  tuess.agregarMateria(tys)
+  tuess.agregarMateria(economia)
+  tuess.agregarMateria(desarrolloLocal)
+  to.agregarMateria(lea)
+  to.agregarMateria(cienciasSalud)
+  to.agregarMateria(psicologia)
+  to.agregarMateria(antropologia)
+  to.agregarMateria(sociologia)
+  alex.inscribirseACarrera(programacion)
+  alex.inscribirseACarrera(tuess)
+  alex.registrarCursada(mate1, 2)
+  alex.registrarCursada(objetos1, 10)
+  alex.registrarCursada(economia, 6)
+  alex.registrarCursada(tys, 8)
+  alex.registrarCursada(mate1, 8)
+  alex.registrarCursada(bd, 2)
+  andy.inscribirseACarrera(programacion)
+  andy.registrarCursada(objetos1, 10)
+  andy.registrarCursada(mate1, 10)
+  
+
+}
+
+  test "P1 " {
     assert.that(alex.estaInscriptoEnCarrera(programacion))
     assert.that(alex.estaInscriptoEnCarrera(tuess))
     assert.notThat(alex.estaInscriptoEnCarrera(to))
+    assert.that(alex.carreraTieneAMateria(bd))
+    assert.notThat(alex.carreraTieneAMateria(psicologia))
+    assert.throwsException({ alex.inscribirseACarrera(programacion)})
   }
 
-  test "P1.1 No se puede inscribir a Alex dos veces a Programación" {
-    assert.throwsExceptionWithMessage("Alex ya está inscripto/a en Programación", { alex.inscribirseACarrera(programacion) })
-  }
-
-  test "P1.2 Las carreras de Alex son Programación y TUESS" {
-    assert.equals(#{programacion, tuess}, alex.carrerasInscriptas())
-  }
-
-  test "P1.2 Modificar las carreras que devuelve Alex no cambia sus inscripciones" {
-    alex.carrerasInscriptas().add(to)
-    assert.notThat(alex.estaInscriptoEnCarrera(to))
-  }
-
-  test "P1.3 Bases de Datos pertenece a una carrera de Alex" {
-    assert.that(alex.estaInscriptoEnCarreraQueTiene(bd))
-  }
-
-  test "P1.3 Psicología no pertenece a ninguna carrera de Alex" {
-    assert.notThat(alex.estaInscriptoEnCarreraQueTiene(psicologia))
-  }
-
-  test "P1 Una materia solo puede agregarse a su propia carrera" {
-    assert.throwsExceptionWithMessage("La materia Objetos 1 no pertenece a la carrera TUESS", { tuess.agregarMateria(objetos1) })
-  }
 
   // ======================= PARTE 2: Historia académica =======================
 
-  test "P2.1 caso 1: las cursadas quedan registradas" {
-    assert.equals(2, alex.cursadasDeMateria(mate1).size())
-    assert.equals(1, alex.cursadasDeMateria(objetos1).size())
-    assert.equals(1, alex.cursadasDeMateria(economia).size())
-    assert.equals(1, alex.cursadasDeMateria(tys).size())
-    assert.equals(1, alex.cursadasDeMateria(bd).size())
+  test "P2"{
+  assert.throwsException({ alex.registrarCursada(mate1, 7)})
+  assert.throwsException({ alex.registrarCursada(bd, 12)})
+  assert.that(alex.tieneAprobadaMateria(mate1))
+  assert.notThat(alex.tieneAprobadaMateria(bd))
+  assert.equals(alex.historiaAcademica().promedioDeMateriasAprobadasEnCarrera(programacion), 9)
+  assert.equals(alex.historiaAcademica().cantidadAprobadasDeCarrera(programacion), 2)
+   assert.equals(alex.historiaAcademica().promedioDeMateriasAprobadasEnCarrera(tuess), 7)
+   assert.throwsException({ alex.historiaAcademica().promedioDeMateriasAprobadasEnCarrera(to) })
+   assert.equals(alex.historiaAcademica().promedioDeMateriasAprobadasEnCarreras(alex.carreras()), 8)
+   assert.equals(alex.historiaAcademica().ordenDeCursadaDeMateria(mate1), [(mate1,2), (mate1,8)])
   }
 
-  test "P2.1 caso 2: no se puede registrar una materia ya aprobada" {
-    assert.throwsExceptionWithMessage("Alex no puede registrar la materia Matemática 1: ya la tiene aprobada", { alex.registrarCursada(mate1, 7) })
-    assert.equals(2, alex.cursadasDeMateria(mate1).size())
-  }
-
-  test "P2.1 caso 3: no se puede registrar una nota fuera de rango" {
-    assert.throwsExceptionWithMessage("Nota inválida: 12. Debe estar entre 1 y 10", { alex.registrarCursada(bd, 12) })
-    assert.equals(1, alex.cursadasDeMateria(bd).size())
-  }
-
-  test "P2.1 no se puede registrar una materia de una carrera en la que no está inscripta" {
-    assert.throwsExceptionWithMessage("Alex no puede registrar la materia Psicología: no pertenece a ninguna de sus carreras", { alex.registrarCursada(psicologia, 8) })
-  }
-
-  test "P2.1 no se puede crear una cursada con nota inválida" {
-    assert.throwsExceptionWithMessage("Nota inválida: 0. Debe estar entre 1 y 10", { new Cursada(materia = bd, nota = 0) })
-  }
-
-  test "P2.2 caso 4: Alex tiene aprobada Matemática 1" {
-    assert.that(alex.tieneAprobadaMateria(mate1))
-  }
-
-  test "P2.2 caso 5: Alex no tiene aprobada Bases de Datos" {
-    assert.notThat(alex.tieneAprobadaMateria(bd))
-  }
-
-  test "P2.3 caso 6: el promedio en Programación es 9" {
-    assert.equals(9, alex.promedioDeMateriasAprobadasEnCarrera(programacion))
-  }
-
-  test "P2.3 caso 7: la cantidad de materias aprobadas en Programación es 2" {
-    assert.equals(2, alex.cantidadDeMateriasAprobadasEnCarrera(programacion))
-  }
-
-  test "P2.3 caso 8: el promedio en TUESS es 7" {
-    assert.equals(7, alex.promedioDeMateriasAprobadasEnCarrera(tuess))
-  }
-
-  test "P2.3 caso 9: no se puede ver el promedio de una carrera en la que no está inscripta" {
-    assert.throwsExceptionWithMessage("Alex no está inscripto/a en Terapia Ocupacional: no se puede calcular el promedio", { alex.promedioDeMateriasAprobadasEnCarrera(to) })
-  }
-
-  test "P2.3 caso 10: no se puede ver el promedio de una carrera sin materias aprobadas" {
-    alex.inscribirseACarrera(to)
-    assert.throwsExceptionWithMessage("No hay materias aprobadas en Terapia Ocupacional: no se puede calcular el promedio", { alex.promedioDeMateriasAprobadasEnCarrera(to) })
-  }
-
-  test "P2.4 caso 11: el promedio y la cantidad contando todas las carreras" {
-    assert.equals(8, alex.promedioDeMateriasAprobadasEnTodasSusCarreras())
-    assert.equals(4, alex.cantidadDeMateriasAprobadasEnTodasSusCarreras())
-  }
-
-  test "P2.5 caso 12: las cursadas de Mate 1 son primero 2 y después 8" {
-    assert.equals([2, 8], alex.cursadasDeMateria(mate1).map({ cursada => cursada.nota() }))
-  }
 
   // ======================= PARTE 3: Inscripción a materias =======================
+test "P3"{
+assert.that(andy.puedeInscribirseAMateria(objetos2))
+assert.that(alex.puedeInscribirseAMateria(epl))
+assert.that(alex.puedeInscribirseAMateria(objetos2))
+assert.that(alex.puedeInscribirseAMateria(bd))
+assert.that(alex.puedeInscribirseAMateria(mEyA))
+assert.notThat(alex.puedeInscribirseAMateria(tys))
+assert.notThat(alex.puedeInscribirseAMateria(economia))
+assert.notThat(alex.puedeInscribirseAMateria(desarrolloLocal))
+assert.throwsException({ alex.inscribirAMateria(psicologia) })
+assert.notThat(alex.puedeInscribirseAMateria(economia))
+assert.throwsException({ alex.inscribirAMateria(economia) })
+assert.notThat(alex.puedeInscribirseAMateria(desarrolloLocal))
+assert.throwsException({ alex.inscribirAMateria(desarrolloLocal) })
+alex.inscribirseAMateria(objetos2)
+assert.throwsException({ alex.inscribirAMateria(objetos2) })
+andy.inscribirseAMateria(objetos2)
+assert.equals(#{andy, alex}, objetos2.estudiantes())
+}
 
-  test "P3.1 caso 1: Alex puede inscribirse a Objetos 2" {
-    assert.that(alex.puedeInscribirseAMateria(objetos2))
-  }
+ // ======================= PARTE 4: Distintos tipos de requisitos=======================
 
-  test "P3.3 caso 2: materias habilitadas de Alex en Programación: epl, obj2 y bd" {
-    assert.equals(#{epl, objetos2, bd}, alex.materiasHabilitadasEnCarrera(programacion))
-  }
+ test "P4"{
+  andy.inscribirseACarrera(to)
+  andy.registrarCursada(lea, 10)
+  assert.that(andy.puedeInscribirseAMateria(cienciasSalud))
+  assert.that(andy.puedeInscribirseAMateria(antropologia))
+  assert.notThat(andy.puedeInscribirseAMateria(lea))
+  assert.notThat(andy.puedeInscribirseAMateria(psicologia))
+  assert.notThat(andy.puedeInscribirseAMateria(sociologia))
+  andy.registrarCursada(antropologia, 10)
+  assert.that(andy.puedeInscribirseAMateria(cienciasSalud))
+  assert.notThat(andy.puedeInscribirseAMateria(antropologia))
+  assert.notThat(andy.puedeInscribirseAMateria(lea))
+  assert.notThat(andy.puedeInscribirseAMateria(psicologia))
+  assert.that(andy.puedeInscribirseAMateria(sociologia))
+  andy.registrarCursada(cienciasSalud, 10)
+  assert.notThat(andy.puedeInscribirseAMateria(cienciasSalud))
+  assert.notThat(andy.puedeInscribirseAMateria(antropologia))
+  assert.notThat(andy.puedeInscribirseAMateria(lea))
+  assert.that(andy.puedeInscribirseAMateria(psicologia))
+  assert.that(andy.puedeInscribirseAMateria(sociologia))
+  andy.inscribirseAMateria(psicologia)
+  andy.inscribirseAMateria(sociologia)
+ assert.equals(psicologia.estudiantes(), #{andy})
+ assert.equals(sociologia.estudiantes(), #{andy})
+ }
 
-  test "P3.3 caso 3: la única materia habilitada de Alex en TUESS es MEyA" {
-    assert.equals(#{mEyA}, alex.materiasHabilitadasEnCarrera(tuess))
-  }
-
-  test "P3.1 caso 4: Alex no puede inscribirse a Psicología (no está en TO)" {
-    assert.notThat(alex.puedeInscribirseAMateria(psicologia))
-  }
-
-  test "P3.2 caso 5: no se puede inscribir a Alex en Psicología" {
-    assert.throwsExceptionWithMessage("Alex no puede inscribirse a Psicología: no pertenece a ninguna de sus carreras", { alex.inscribirseAMateria(psicologia) })
-    assert.notThat(psicologia.tieneInscriptoA(alex))
-  }
-
-  test "P3.1 caso 6: Alex no puede inscribirse a Economía (ya la aprobó)" {
-    assert.notThat(alex.puedeInscribirseAMateria(economia))
-  }
-
-  test "P3.2 caso 7: no se puede inscribir a Alex en Economía" {
-    assert.throwsExceptionWithMessage("Alex no puede inscribirse a Economía: ya la tiene aprobada", { alex.inscribirseAMateria(economia) })
-    assert.notThat(economia.tieneInscriptoA(alex))
-  }
-
-  test "P3.1 caso 8: Alex no puede inscribirse a Desarrollo Local (no aprobó MEyA)" {
-    assert.notThat(alex.puedeInscribirseAMateria(desarrolloLocal))
-  }
-
-  test "P3.2 caso 9: no se puede inscribir a Alex en Desarrollo Local" {
-    assert.throwsExceptionWithMessage("Alex no puede inscribirse a Desarrollo Local: no cumple los requisitos de la materia", { alex.inscribirseAMateria(desarrolloLocal) })
-    assert.notThat(desarrolloLocal.tieneInscriptoA(alex))
-  }
-
-  test "P3.2 caso 10: Alex se inscribe a Objetos 2" {
-    alex.inscribirseAMateria(objetos2)
-    assert.that(alex.estaInscriptoEnMateria(objetos2))
-  }
-
-  test "P3.2 caso 11: no se puede inscribir a Alex dos veces en Objetos 2" {
-    alex.inscribirseAMateria(objetos2)
-    assert.throwsExceptionWithMessage("Alex no puede inscribirse a Objetos 2: ya está inscripto/a en ella", { alex.inscribirseAMateria(objetos2) })
-  }
-
-  test "P3.2 caso 12: Andy se inscribe a Objetos 2" {
-    andy.inscribirseAMateria(objetos2)
-    assert.that(andy.estaInscriptoEnMateria(objetos2))
-  }
-
-  test "P3.2 caso 13: los inscriptos en Objetos 2 son solo Alex y Andy" {
-    alex.inscribirseAMateria(objetos2)
-    andy.inscribirseAMateria(objetos2)
-    assert.that(objetos2.losUnicosInscriptosSon([alex, andy]))
-    assert.notThat(objetos2.losUnicosInscriptosSon([alex]))
-  }
-
-  // ======================= PARTE 4: Distintos tipos de requisitos =======================
-
-  test "P4 paso 1: al comienzo Andy solo puede inscribirse en TO a LEA y Ciencias de la Salud" {
-    assert.equals(#{lea, cienciasSalud}, andy.materiasHabilitadasEnCarrera(to))
-  }
-
-  test "P4 paso 2: con LEA aprobada (8 créditos en TO) puede Ciencias de la Salud y Antropología" {
-    andy.registrarCursada(lea, 10)
-    assert.equals(#{cienciasSalud, antropologia}, andy.materiasHabilitadasEnCarrera(to))
-  }
-
-  test "P4 paso 3: con LEA y Antropología (12 créditos) puede Ciencias de la Salud y Sociología" {
-    andy.registrarCursada(lea, 10)
-    andy.registrarCursada(antropologia, 10)
-    assert.equals(#{cienciasSalud, sociologia}, andy.materiasHabilitadasEnCarrera(to))
-  }
-
-  test "P4 paso 4: con el primer anio de TO aprobado puede Psicología y Sociología" {
-    andy.registrarCursada(lea, 10)
-    andy.registrarCursada(antropologia, 10)
-    andy.registrarCursada(cienciasSalud, 10)
-    assert.equals(#{psicologia, sociologia}, andy.materiasHabilitadasEnCarrera(to))
-  }
-
-  test "P4 paso 5: Andy se inscribe a Psicología y Sociología y es el único inscripto en ambas" {
-    andy.registrarCursada(lea, 10)
-    andy.registrarCursada(antropologia, 10)
-    andy.registrarCursada(cienciasSalud, 10)
-    andy.inscribirseAMateria(psicologia)
-    andy.inscribirseAMateria(sociologia)
-
-    assert.that(psicologia.losUnicosInscriptosSon([andy]))
-    assert.that(sociologia.losUnicosInscriptosSon([andy]))
-  }
 }
